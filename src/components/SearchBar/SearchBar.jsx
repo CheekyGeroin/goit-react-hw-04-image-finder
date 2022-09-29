@@ -1,50 +1,49 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
-import { BiSearch } from 'react-icons/bi'
-import {SearchHeader, SearchForm, SearchButton, SearchInput} from './SearchBar.styled'
+import { useState } from 'react';
 
-class SearchBar extends Component {
-  state = {
-    itemName: '',
+import { BiSearch } from 'react-icons/bi';
+import {
+  SearchHeader,
+  SearchForm,
+  SearchButton,
+  SearchInput,
+} from './SearchBar.styled';
+
+export const SearchBar = ({ onSubmit }) => {
+  const [itemName, setItemName] = useState('');
+
+  const handleChange = e => {
+    const val = e.currentTarget.value.toLowerCase();
+
+    setItemName(val);
   };
 
-  handleChange = e => {
-    const value = e.currentTarget.value.toLowerCase();
-      this.setState({ itemName: value });
-  };
-
-  searchResult = e => {
+  const searchResult = e => {
     e.preventDefault();
 
-    this.props.onSubmit(this.state);
-
+    onSubmit(itemName);
   };
 
-  render() {
-    const { itemName } = this.state;
-    return (
-      <SearchHeader>
-        <SearchForm onSubmit={this.searchResult}>
-          <SearchButton type="submit">
-                    <BiSearch style={{width: 30, height: 30}} />
-          </SearchButton>
+  return (
+    <SearchHeader>
+      <SearchForm onSubmit={searchResult}>
+        <SearchButton type="submit">
+          <BiSearch style={{ width: 30, height: 30 }} />
+        </SearchButton>
 
-          <SearchInput
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.handleChange}
-            value={itemName}
-          />
-        </SearchForm>
-      </SearchHeader>
-    );
-  }
-}
+        <SearchInput
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={handleChange}
+          value={itemName}
+        />
+      </SearchForm>
+    </SearchHeader>
+  );
+};
 
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
-
-export default SearchBar;
